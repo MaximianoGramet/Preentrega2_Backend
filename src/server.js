@@ -5,7 +5,6 @@ import ViewsRouter from "./routes/views.routes.js";
 import { Server } from "socket.io";
 import handlebars from "express-handlebars";
 import __dirname from "./utils.js";
-import { ProductManager,Product } from "./manager/ProductManager.js";
 import mongoose from "mongoose";
 import messageDao from "./daos/dbManager/message.dao.js";
 
@@ -38,8 +37,6 @@ Host.set("view engine", "hbs");
 Host.set("views", `${__dirname}/routes/views`);
 
 Host.use(express.static(`${__dirname}/public`))
-
-const ProManager = new ProductManager("./src/manager/Products.json")
 
 io.on('connection', (socket) => {
     console.log('new client connected');
