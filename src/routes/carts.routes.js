@@ -91,7 +91,55 @@ router.delete("/:cid", async (req, res) => {
     }
 });
 
-router.post("/:cid/product/:pid", async (req, res) => {
+
+//! tiene un /clear para que se diferencie del de arriba
+router.delete("/:cid/clear", async (req, res) => {
+    const { cid } = req.params;
+    try {
+        const result = await cartDao.clearCart(cid);
+        res.json({
+            result,
+            message: "Cart cleared"
+        });
+    } catch (error) {
+        console.error(error);
+        res.json({
+            error,
+            message: "Error"
+        });
+    }
+});
+
+router.delete("/:cid/products/:pid", async (req, res) => {
+    const { cid, pid } = req.params;
+    try {
+        const result = await cartDao.deleteProductFromCart(cid, pid);
+        res.json({
+            result,
+            message: "Product deleted from cart"
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+router.put('/:cid/products/:pid', async (req, res) => {
+    const { cid, pid } = req.params;
+    const { quantity } = req.body;
+    try {
+        const result = await cartDao.setProductQuantity(cid, pid, quantity);
+        res.json({
+            result,
+            message: "Product quantity updated"
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+router.post("/:cid/products/:pid", async (req, res) => {
     const { cid, pid } = req.params;
     try {
         const result = await cartDao.addProductCart(cid, pid);

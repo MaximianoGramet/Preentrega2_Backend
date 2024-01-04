@@ -28,23 +28,11 @@ class CartDao {
 
   async getCartProduct(id) {
     try {
-      const cart = await CartModel.findById(id).lean();
+      const cart = await CartModel.findById(id).populate('products.product').lean();
 
       if (!cart) {
         return null;
       }
-
-      cart.products = await Promise.all(
-        cart.products.map(async (product) => {
-          try {
-            const detailedProduct = await productModel.findById(product.product);
-            return { product: detailedProduct, quantity: product.quantity };
-          } catch (error) {
-            console.error(`Error at getting product details: ${error.message}`);
-            return null;
-          }
-        })
-      );
 
       return cart;
     } catch (error) {

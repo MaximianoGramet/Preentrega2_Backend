@@ -8,7 +8,8 @@ const ROUTER = Router();
 ROUTER.get("/",async (req,res)=>{
 
     try{
-        const products = await ProductDao.findProduct();
+        const { limit, page, query, sort } = req.query;
+        const products = await ProductDao.findProduct(limit, page, query, sort);
         res.json({
           data: products,
           message: "Products List"
@@ -17,7 +18,7 @@ ROUTER.get("/",async (req,res)=>{
         console.log(error);
         res.json({
           error,
-          message: "Error",
+          message: "error",
         });
       }
 })
@@ -46,10 +47,10 @@ ROUTER.get("/:id", async (req, res) => {
   });
 
 
-ROUTER.delete("/:id",(req,res)=>{
+ROUTER.delete("/:id", async (req,res)=>{
     const {id} = req.params
     try{
-        ProManager.deleteProduct(Number(id))
+        await ProductDao.deleteProduct(id)
         return res.status(200).json({ message: 'Product deleted successfully' })
 
     }catch(error){
@@ -59,7 +60,7 @@ ROUTER.delete("/:id",(req,res)=>{
 
 ROUTER.post("/", async (req,res)=>{
     try { 
-        const product = await ProductDao.createProducts(req.body);
+        const product = await ProductDao.createProduct(req.body);
         res.json({
             product,
             message: "Product created"
@@ -77,7 +78,7 @@ ROUTER.post("/", async (req,res)=>{
 ROUTER.put("/:pid",async (req,res)=>{
     try {
         const { id } = req.params;
-        const product = await ProductDao.updateProducts(id, req.body);
+        const product = await ProductDao.updateProduct(id, req.body);
 
         res.json({
             product,
@@ -93,23 +94,5 @@ ROUTER.put("/:pid",async (req,res)=>{
     }
 })
 
-ROUTER.delete("/:id", async (req, res) => {
-    try {
-        const { id } = req.params;
-        const product = await ProductDao.deleteProducts(id);
-
-        res.json({
-            product,
-            message: "Product deleted"
-        });
-    }
-    catch (error){
-        console.log(error);
-        res.json({
-            error,
-            message: "error"
-        });
-    }
-});
 
 export default ROUTER
