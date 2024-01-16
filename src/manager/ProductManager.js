@@ -64,14 +64,14 @@ class ProductManager{
         }
     }
 
-    getProductById(id){
-        console.log(id)
-        const product = this.Products.find((prod) => prod.id == id);
-        if (!product){
-            throw new Error("Producto no encontrado");
+        getProductById(id){
+            console.log(id)
+            const product = this.Products.find((prod) => prod.id == id);
+            if (!product){
+                throw new Error("Producto no encontrado");
+            }
+            return product || null; 
         }
-        return product || null; 
-    }
 
     deleteProduct(id){
         const productDelete = this.Products.findIndex((product) => product.id === id);

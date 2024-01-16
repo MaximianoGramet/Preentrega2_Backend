@@ -1,11 +1,11 @@
 import { Router } from "express";
-import cartDao from "../daos/dbManager/cart.dao.js";
+import CartDao from "../daos/dbManager/cart.dao.js";
 
 const router = Router();
 
 router.get("/", async (req, res) => {
     try {
-        const carts = await cartDao.findCart();
+        const carts = await CartDao.findCart();
         res.json({
             data: carts,
             message: "Carts list"
@@ -22,7 +22,7 @@ router.get("/", async (req, res) => {
 router.get("/:cid", async (req, res) => {
     const { cid } = req.params;
     try {
-        const cart = await cartDao.findById(cid);
+        const cart = await CartDao.findById(cid);
 
         if (!cart) {
             return res.status(404).json({ message: "Cart not found" });
@@ -43,7 +43,7 @@ router.get("/:cid", async (req, res) => {
 
 router.post("/", async (req, res) => {
     try {
-        const cart = await cartDao.createCart(req.body);
+        const cart = await CartDao.createCart(req.body);
         res.json({
             cart,
             message: "Cart created"
@@ -60,7 +60,7 @@ router.post("/", async (req, res) => {
 router.put("/:cid", async (req, res) => {
     const { cid } = req.params;
     try {
-        const cart = await cartDao.updateCart(cid, req.body);
+        const cart = await CartDao.updateCart(cid, req.body);
         res.json({
             cart,
             message: "Cart updated"
@@ -77,7 +77,7 @@ router.put("/:cid", async (req, res) => {
 router.delete("/:cid", async (req, res) => {
     const { cid } = req.params;
     try {
-        const cart = await cartDao.deleteCart(cid);
+        const cart = await CartDao.deleteCart(cid);
         res.json({
             cart,
             message: "Cart deleted"
@@ -96,7 +96,7 @@ router.delete("/:cid", async (req, res) => {
 router.delete("/:cid/clear", async (req, res) => {
     const { cid } = req.params;
     try {
-        const result = await cartDao.clearCart(cid);
+        const result = await CartDao.clearCart(cid);
         res.json({
             result,
             message: "Cart cleared"
@@ -113,7 +113,7 @@ router.delete("/:cid/clear", async (req, res) => {
 router.delete("/:cid/products/:pid", async (req, res) => {
     const { cid, pid } = req.params;
     try {
-        const result = await cartDao.deleteProductFromCart(cid, pid);
+        const result = await CartDao.deleteProductFromCart(cid, pid);
         res.json({
             result,
             message: "Product deleted from cart"
@@ -128,7 +128,7 @@ router.put('/:cid/products/:pid', async (req, res) => {
     const { cid, pid } = req.params;
     const { quantity } = req.body;
     try {
-        const result = await cartDao.setProductQuantity(cid, pid, quantity);
+        const result = await CartDao.setProductQuantity(cid, pid, quantity);
         res.json({
             result,
             message: "Product quantity updated"
@@ -142,7 +142,7 @@ router.put('/:cid/products/:pid', async (req, res) => {
 router.post("/:cid/products/:pid", async (req, res) => {
     const { cid, pid } = req.params;
     try {
-        const result = await cartDao.addProductCart(cid, pid);
+        const result = await CartDao.addProductCart(cid, pid);
         res.json({
             result,
             message: "Product added"

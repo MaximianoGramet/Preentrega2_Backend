@@ -1,5 +1,5 @@
 import { CartModel } from "../../models/cart.model.js";
-import {productModel} from "../../models/product.model.js";
+import {postModel} from "../../models/product.model.js";
 
 class CartDao {
   async findCart() {
@@ -48,7 +48,7 @@ class CartDao {
         throw new Error('Cart not found');
       }
   
-      const product = await productModel.findById(productId);
+      const product = await postModel.findById(productId);
       if (!product) {
         throw new Error('Product not found');
       }
